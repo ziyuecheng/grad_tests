@@ -13,7 +13,7 @@ spec:
       FUNC_NAME: "CheckSum"
       FUNC_CLEAR_SOURCE: "true"
     srcRepo:
-      url: "https://github.com/OpenFunction/samples.git"
+      url: "https://github.com/ziyuecheng/grad_tests.git"
       sourceSubPath: "checksum"
       revision: "main"
   serving:
