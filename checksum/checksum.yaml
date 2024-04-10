@@ -1,0 +1,41 @@
+apiVersion: core.openfunction.io/v1beta2
+kind: Function
+metadata:
+  name: check-sum
+spec:
+  workloadRuntime: wasmedge
+  image: ziyuecheng/checksum:0.1.0
+  imageCredentials:
+    name: push-secret
+  build:
+    builder: openfunction/builder-go:latest
+    env:
+      FUNC_NAME: "CheckSum"
+      FUNC_CLEAR_SOURCE: "true"
+    srcRepo:
+      url: "https://github.com/OpenFunction/samples.git"
+      sourceSubPath: "checksum"
+      revision: "main"
+  serving:
+    scaleOptions:
+      minReplicas: 0
+    template:
+      containers:
+        - command:
+            - /check_sum.wasm
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 3
+            periodSeconds: 30
+            tcpSocket:
+              port: 8080
+          name: function
+    triggers:
+      http:
+        port: 8080
+        route:
+          rules:
+            - matches:
+                - path:
+                    type: PathPrefix
+                    value: /echo
