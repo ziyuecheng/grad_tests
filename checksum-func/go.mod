@@ -1,5 +1,3 @@
-module example.com/hello
+module checksum
 
-go 1.17
-
-require github.com/OpenFunction/functions-framework-go v0.5.0
+go 1.19
