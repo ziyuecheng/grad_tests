@@ -2,16 +2,19 @@ apiVersion: core.openfunction.io/v1beta2
 kind: Function
 metadata:
   name: check-sum
+  namespace: default
 spec:
   workloadRuntime: wasmedge
   image: ziyuecheng/checksum:0.1.0
   imageCredentials:
     name: push-secret
   build:
-    builder: openfunction/builder-go:latest
-    env:
-      FUNC_NAME: "CheckSum"
-      FUNC_CLEAR_SOURCE: "true"
+    build:
+    builder: openfunction/buildah:v1.23.1
+    shipwright:
+      strategy:
+        kind: ClusterBuildStrategy
+        name: buildah
     srcRepo:
       url: "https://github.com/ziyuecheng/grad_tests.git"
       sourceSubPath: "checksum"

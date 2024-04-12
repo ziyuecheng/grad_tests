@@ -1,14 +1,16 @@
-FROM ghcr.io/korvoj/wasm-serverless-benchmarks/util/tinygo-wasmedge-builder:0.26.0 as builder
-USER root
-RUN mkdir /build
-RUN chown -R tinygo:tinygo /build
-USER tinygo
-COPY . /build/
-WORKDIR /build
-RUN tinygo build -o checksum.wasm -target wasi main.go
-RUN wasmedgec checksum.wasm checksum.aot.wasm 
-RUN chmod +x checksum.aot.wasm
+# From https://github.com/homeport/gonut/tree/master/assets/sample-apps/golang
+
+FROM golang:1.16 AS build
+
+COPY main.go .
+ENV CGO_ENABLED=0
+RUN go build \
+    -tags netgo \
+    -ldflags "-s -w -extldflags '-static'" \
+    -o /tmp/checksum \
+    main.go
 
 FROM scratch
-COPY --from=builder /build/checksum.aot.wasm /
-ENTRYPOINT ["/checksum.aot.wasm"]
+COPY --from=build /tmp/checksum ./checksum
+ENTRYPOINT [ "./checksum" ]
+EXPOSE 8080

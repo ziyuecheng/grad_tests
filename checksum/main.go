@@ -1,4 +1,4 @@
-package checksum
+package main
 
 import (
 	"crypto/md5"
@@ -50,7 +50,7 @@ func md5sum(filePath string) (string, error) {
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
-func CheckSum() {
+func main() {
 	if len(os.Args) == 2 {
 		filePath := os.Args[1]
 		rsha256sum, _ := sha256sum(filePath)
