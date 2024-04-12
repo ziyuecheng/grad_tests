@@ -1,7 +1,5 @@
 FROM --platform=$BUILDPLATFORM rust:1.77 AS buildbase
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal --default-toolchain stable
-
 RUN rustup target add wasm32-wasi
 WORKDIR /src
 
