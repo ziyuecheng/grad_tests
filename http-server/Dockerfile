@@ -1,17 +1,14 @@
 FROM --platform=$BUILDPLATFORM rust:1.77 AS buildbase
-
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal --default-toolchain stable
-
 RUN rustup target add wasm32-wasi
 WORKDIR /src
 
 FROM --platform=$BUILDPLATFORM buildbase AS buildserver
-COPY pn /src
+COPY server /src
 RUN --mount=type=cache,target=/usr/local/cargo/git/db \
     --mount=type=cache,target=/usr/local/cargo/registry/cache \
     --mount=type=cache,target=/usr/local/cargo/registry/index \
     cargo build --target wasm32-wasi --release
 
-FROM scratch AS pn
-ENTRYPOINT [ "prime_numbers.wasm" ]
-COPY --from=buildserver /src/target/wasm32-wasi/release/prime_numbers.wasm prime_numbers.wasm
+FROM scratch AS server
+ENTRYPOINT [ "wasmedge_hyper_server.wasm" ]
+COPY --from=buildserver /src/target/wasm32-wasi/release/wasmedge_hyper_server.wasm wasmedge_hyper_server.wasm
