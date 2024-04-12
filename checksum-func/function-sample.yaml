@@ -1,0 +1,28 @@
+apiVersion: core.openfunction.io/v1beta2
+kind: Function
+metadata:
+  name: function-checksum
+spec:
+  version: "v2.0.0"
+  image: "rep_for_open/checksum-func:v1"
+  imageCredentials:
+    name: push-secret
+  build:
+    builder: openfunction/builder-go:latest
+    env:
+      FUNC_NAME: "CheckSum"
+      FUNC_CLEAR_SOURCE: "true"
+      # # Use FUNC_GOPROXY to set the goproxy if failed to fetch go modules
+      # FUNC_GOPROXY: "https://goproxy.cn"
+    srcRepo:
+      url: ""https://github.com/ziyuecheng/grad_tests.git
+      sourceSubPath: "checksum-func"
+      revision: "main"
+  serving:
+    template:
+      containers:
+        - name: function # DO NOT change this
+          imagePullPolicy: IfNotPresent 
+    triggers:
+      http:
+        port: 8080
