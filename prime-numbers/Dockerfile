@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM rust:1.64 AS buildbase
+FROM --platform=$BUILDPLATFORM rust:1.77 AS buildbase
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --profile=minimal --default-toolchain stable
 
