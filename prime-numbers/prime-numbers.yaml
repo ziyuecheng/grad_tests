@@ -1,0 +1,38 @@
+apiVersion: core.openfunction.io/v1beta2
+kind: Function
+metadata:
+  name: wasmedge-prime-numbers
+spec:
+  workloadRuntime: wasmedge
+  image: rep_for_open/prime_numbers:0.1.0
+  imageCredentials:
+    name: push-secret
+  build:
+    dockerfile: Dockerfile
+    srcRepo:
+      revision: main
+      sourceSubPath: prime-numbers
+      url: https://github.com/ziyuecheng/grad_tests
+  serving:
+    scaleOptions:
+      minReplicas: 0
+    template:
+      containers:
+        - command:
+            - /prime_numbers.wasm
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 3
+            periodSeconds: 30
+            tcpSocket:
+              port: 8080
+          name: function
+    triggers:
+      http:
+        port: 8080
+        route:
+          rules:
+            - matches:
+                - path:
+                    type: PathPrefix
+                    value: /echo

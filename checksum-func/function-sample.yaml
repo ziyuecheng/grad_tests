@@ -4,7 +4,7 @@ metadata:
   name: function-checksum
 spec:
   version: "v2.0.0"
-  image: "rep_for_open/checksum-func:v1"
+  image: "rep_for_open/checksum_func:v1"
   imageCredentials:
     name: push-secret
   build:
