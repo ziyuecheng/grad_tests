@@ -1,5 +1,3 @@
-# From https://github.com/homeport/gonut/tree/master/assets/sample-apps/golang
-
 FROM golang:1.16 AS build
 
 COPY main.go .

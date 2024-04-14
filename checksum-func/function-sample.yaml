@@ -1,10 +1,10 @@
 apiVersion: core.openfunction.io/v1beta2
 kind: Function
 metadata:
-  name: function-checksum
+  name: checksum-func
 spec:
   version: "v2.0.0"
-  image: "rep_for_open/checksum_func:v1"
+  image: "ziyuecheng/rep_for_open:v1"
   imageCredentials:
     name: push-secret
   build:
@@ -15,8 +15,8 @@ spec:
       # # Use FUNC_GOPROXY to set the goproxy if failed to fetch go modules
       # FUNC_GOPROXY: "https://goproxy.cn"
     srcRepo:
-      url: ""https://github.com/ziyuecheng/grad_tests.git
-      sourceSubPath: "checksum-func"
+      url: "https://github.com/OpenFunction/samples.git"
+      sourceSubPath: "functions/knative/hello-world-go"
       revision: "main"
   serving:
     template:
