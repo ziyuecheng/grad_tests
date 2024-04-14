@@ -1,9 +1,8 @@
 apiVersion: core.openfunction.io/v1beta2
 kind: Function
 metadata:
-  name: wasmedge-prime-numbers
+  name: prime-numbers
 spec:
-  workloadRuntime: wasmedge
   image: ziyuecheng/rep_for_open:0.1.0
   imageCredentials:
     name: push-secret
@@ -18,21 +17,8 @@ spec:
       minReplicas: 0
     template:
       containers:
-        - command:
-            - /prime_numbers.wasm
+        - name: function
           imagePullPolicy: IfNotPresent
-          livenessProbe:
-            initialDelaySeconds: 3
-            periodSeconds: 30
-            tcpSocket:
-              port: 8080
-          name: function
     triggers:
       http:
         port: 8080
-        route:
-          rules:
-            - matches:
-                - path:
-                    type: PathPrefix
-                    value: /echo

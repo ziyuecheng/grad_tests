@@ -1,8 +1,9 @@
 apiVersion: core.openfunction.io/v1beta2
 kind: Function
 metadata:
-  name: http-server
+  name: wasmedge-http-server
 spec:
+  workloadRuntime: wasmedge
   image: ziyuecheng/rep_for_open:0.1.0
   imageCredentials:
     name: push-secret
@@ -10,20 +11,22 @@ spec:
     dockerfile: Dockerfile
     srcRepo:
       revision: main
-      sourceSubPath: http-server
+      sourceSubPath: http-server-wasm
       url: https://github.com/ziyuecheng/grad_tests
   serving:
     scaleOptions:
       minReplicas: 0
     template:
       containers:
-        - name: function
+        - command:
+            - /wasmedge_hyper_server.wasm
           imagePullPolicy: IfNotPresent
           livenessProbe:
             initialDelaySeconds: 3
             periodSeconds: 30
             tcpSocket:
               port: 8080
+          name: function
     triggers:
       http:
         port: 8080
